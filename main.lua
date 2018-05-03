@@ -6,13 +6,31 @@ function love.load(arg)
   
   enemies.spawn()
 end
-function checkCollisions(enemies, bullets)
+function checkEnemyCollisions(enemies, bullets)
 	for i, e in ipairs(enemies) do
 	    for _, b in ipairs(bullets) do
         if b.y <= e.y + e.height and b.x > e.x and b.x < e.x + e.width then
+            --if a player bullet hits an enemy
+            player.score = player.score + 1
             table.remove(enemies, i)
             enemies.spawn()
             table.remove(bullets, i)
+        end
+	    end
+	end
+end
+function checkPlayerCollisions(enemies, player)
+	for _, e in ipairs(enemies) do
+	    for i, b in ipairs(e.bullets) do
+        if b.y <= player.y + player.height and b.x > player.x and b.x < player.x + player.width then
+            --if an enemy bullet hits a player
+            table.remove(e.bullets, i)
+            if player.health > 0 then
+              --decrease player health
+              player.health = player.health - 1
+            else
+              --player dies
+            end
         end
 	    end
 	end
@@ -38,7 +56,7 @@ function love.update(dt)
     b.y = b.y - player.bulletspeed
   end
   --player bullet collisions with enemies
-  checkCollisions(enemies,player.bullets)
+  checkEnemyCollisions(enemies,player.bullets)
   --manage enemies
   for i,e in ipairs(enemies) do
     if e.y > (love.graphics.getHeight() - 50) then 
@@ -52,8 +70,12 @@ function love.update(dt)
       b.y = b.y + enemy.bulletspeed
     end
   end
+  --enemy bullet collisions with player
+  checkPlayerCollisions(enemies, player)
 end
 function love.draw()
+  --draw player score
+  love.graphics.print("Score:" .. player.score, 0, 0, 0, 2,2)
   --draw player
   love.graphics.setColor(0, 255, 0)
   love.graphics.rectangle("line", player.x, player.y, player.width, player.height)

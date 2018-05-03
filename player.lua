@@ -5,6 +5,7 @@ player.width, player.height = 20, 20
 player.movespeed, player.bulletspeed = 5, 5
 player.cooldown = 20
 player.health = 5
+player.score = 0 
 player.bullets = {}
 
 player.fire = function()
