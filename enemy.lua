@@ -1,26 +1,24 @@
 math.randomseed(os.time())
 enemies = {}
-enemies.max = 1
+enemies.max = 2
+enemies.bullets = {}
 enemies.spawn = function()
-  enemy = {}
-  enemy.x = math.random(100, love.graphics.getWidth() - 100)
-  enemy.y = 20
-  enemy.width, enemy.height = 30, 20
-  enemy.cooldown = 20
-  enemy.movespeed, enemy.bulletspeed = 0.8, 1.8
-  enemy.bullets = {}
-  enemy.fire = function()
-    if enemy.cooldown <= 0 then
-      enemy.cooldown = 30
-      bullet = {}
-      bullet.x = enemy.x + enemy.width / 2
-      bullet.y = enemy.y + 40
-      bullet.radius = 5
-      table.insert(enemy.bullets, bullet)
-    end
-  end
+  enemy = {x = math.random(100, love.graphics.getWidth() - 100),
+           y = 20,
+           width = 30, height = 20,
+           cooldown = 20,
+           movespeed = 0.8, bulletspeed = 1.8}
   table.insert(enemies, enemy)
 end
+enemies.fire = function(enemy)
+    if enemy.cooldown <= 0 then
+      enemy.cooldown = 30
+      bullet = {radius = 5,
+                x = enemy.x + enemy.width / 2, 
+                y = enemy.y + 40}
+      table.insert(enemies.bullets, bullet)
+    end
+  end
 enemies.count = function()
   local c = 0
   for i,_ in ipairs(enemies) do
