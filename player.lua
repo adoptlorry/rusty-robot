@@ -1,20 +1,16 @@
-player = {}
-player.x = love.graphics.getWidth() / 2
-player.y = love.graphics.getHeight() - 200
-player.width, player.height = 20, 20
-player.movespeed, player.bulletspeed = 5, 5
-player.cooldown = 20
-player.health = 5
-player.score = 0 
-player.bullets = {}
-
+player = {x = love.graphics.getWidth() / 2,
+          y = love.graphics.getHeight() - 200,
+          width = 20, height = 20,
+          movespeed = 5, bulletspeed = 5,
+          cooldown = 20,
+          health = 2, score = 0,
+          bullets = {}}
 player.fire = function()
   if player.cooldown <= 0 then
     player.cooldown = 30
-    bullet = {}
-    bullet.x = player.x + (player.width / 2)
-    bullet.y = player.y - 20
-    bullet.radius  = 5
+    bullet = {radius = 5,
+              x = player.x + (player.width / 2),
+              y = player.y - 20}
     table.insert(player.bullets, bullet)
   end
 end

@@ -3,7 +3,6 @@ function love.load(arg)
   require("player")
   require("enemy")
   require("collision")
-  enemies.spawn()
 end
 function love.update(dt)
   --collision with player bullets
@@ -17,12 +16,10 @@ function love.update(dt)
     end
   end
   --collision with enemy bullets
-  for _,e in ipairs(enemies) do
-    for i,b in ipairs(e.bullets) do
-      if CheckCollision(b, player) then
-        player.health = player.health - 1
-        table.remove(e.bullets, i)
-      end
+  for i,b in ipairs(enemies.bullets) do
+    if CheckCollision(b, player) then
+      player.health = player.health - 1
+      table.remove(enemies.bullets, i)
     end
   end
   --manage coolodwns of players and enemies
@@ -31,10 +28,10 @@ function love.update(dt)
     e.cooldown = e.cooldown - 0.2
   end
   --player movement
-  if love.keyboard.isDown("right") then
+  if love.keyboard.isDown("right") and player.x + player.width <= love.graphics.getWidth() then
     player.x = player.x + player.movespeed
   end
-  if love.keyboard.isDown("left") then
+  if love.keyboard.isDown("left") and player.x >= 0 then
     player.x = player.x - player.movespeed
   end
   --player fire
@@ -49,13 +46,14 @@ function love.update(dt)
     if e.y > (love.graphics.getHeight() - 50) then 
       table.remove(enemies, i)
     end
-    e.fire() --try firing for each enemy
+    enemies.fire(e) --try firing for each enemy
     e.y = e.y + e.movespeed --move the enemy down by it's move speed
-    for i,b in ipairs(e.bullets) do --manage each bullet
-      if b.y > (love.graphics.getHeight() - 50) then table.remove(e.bullets, i) end
+    for i,b in ipairs(enemies.bullets) do --manage each bullet
+      if b.y > (love.graphics.getHeight() - 50) then table.remove(enemies.bullets, i) end
       b.y = b.y + e.bulletspeed
     end
   end
+  
   if enemies.count() ~= enemies.max then
     enemies.spawn()
   end
@@ -76,9 +74,7 @@ function love.draw()
     love.graphics.rectangle("line", e.x, e.y, e.width, e.height)
   end
   --draw enemy bullets
-  for _,e in ipairs(enemies) do
-    for _,b in ipairs(e.bullets) do
-      love.graphics.circle("fill", b.x, b.y, b.radius)
-    end
+  for _,b in ipairs(enemies.bullets) do
+    love.graphics.circle("fill", b.x, b.y, b.radius)
   end
 end
