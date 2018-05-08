@@ -1,9 +1,9 @@
-math.randomseed(os.time())
+require("rng")
 enemies = {}
 enemies.max = 2
 enemies.bullets = {}
 enemies.spawn = function()
-  enemy = {x = math.random(100, love.graphics.getWidth() - 100),
+  enemy = {x = get(30),
            y = 20,
            width = 30, height = 20,
            cooldown = 20,
@@ -25,4 +25,8 @@ enemies.count = function()
     c = c + 1
   end
   return c
+end
+enemies.kill = function(i)
+  table.remove(used, enemies[i].x / 31)
+  table.remove(enemies, i)
 end

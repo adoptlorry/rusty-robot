@@ -9,7 +9,7 @@ function love.update(dt)
   for i,e in ipairs(enemies) do
     for _,b in ipairs(player.bullets) do
       if CheckCollision(b, e) then
-        table.remove(enemies, i)
+        enemies.kill(i)
         table.remove(player.bullets, i)
         player.score = player.score + 1
       end
