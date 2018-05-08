@@ -22,17 +22,14 @@ function love.update(dt)
       table.remove(enemies.bullets, i)
     end
   end
-  --manage coolodwns of players and enemies
+  --change cooldowns of player
   player.cooldown = player.cooldown - 0.8
-  for _,e in ipairs(enemies) do
-    e.cooldown = e.cooldown - 0.2
-  end
   --player movement
   if love.keyboard.isDown("right") and player.x + player.width <= love.graphics.getWidth() then
-    player.x = player.x + player.movespeed
+    player.x = player.x + 5
   end
   if love.keyboard.isDown("left") and player.x >= 0 then
-    player.x = player.x - player.movespeed
+    player.x = player.x - 5
   end
   --player fire
   if love.keyboard.isDown("space") then player.fire() end
@@ -43,9 +40,8 @@ function love.update(dt)
   end
   --enemy movement
   for i,e in ipairs(enemies) do
-    if e.y > (love.graphics.getHeight() - 50) then 
-      table.remove(enemies, i)
-    end
+    e.cooldown = e.cooldown - 0.2
+    if e.y > (love.graphics.getHeight() - 50) then enemies.kill(i, e) end
     enemies.fire(e) --try firing for each enemy
     e.y = e.y + e.movespeed --move the enemy down by it's move speed
   end
@@ -72,7 +68,6 @@ function love.draw()
   love.graphics.setColor(255, 0, 0)
   for _,e in ipairs(enemies) do
     love.graphics.rectangle("line", e.x, e.y, e.width, e.height)
-    love.graphics.print(e.x / e.width, e.x, e.y, 0, 1,1)
   end
   --draw enemy bullets
   for _,b in ipairs(enemies.bullets) do
