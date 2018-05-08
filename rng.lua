@@ -1,17 +1,20 @@
+rng = {}
 math.randomseed(os.time())
 used = {}
-function get(width)
-  local windowwidth = love.graphics.getWidth()
+function rng.get(width)
   repeat
-    value = math.random(1, windowwidth / 40)
-  until check(value, used, bound)
-  return value * width + 1
+    newx = math.random(2, (love.graphics.getWidth() / (width)) - 2)
+  until rng.check(newx, used, bound)
+  return newx * width
 end
-function check(value, used, bound)
+function rng.check(value, used, bound)
     if not used[value] then
       used[value] = true
       return true
     else
       return false
     end
+end
+function rng.remove(value)
+  used[value] = false
 end

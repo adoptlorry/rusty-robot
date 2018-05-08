@@ -1,13 +1,13 @@
 require("rng")
 enemies = {}
-enemies.max = 2
+enemies.max = 6
 enemies.bullets = {}
 enemies.spawn = function()
-  enemy = {x = get(30),
-           y = 20,
+  enemy = {x = rng.get(30),
+           y = -10,
            width = 30, height = 20,
            cooldown = 20,
-           movespeed = 0.8, bulletspeed = 1.8}
+           movespeed = 0.8}
   table.insert(enemies, enemy)
 end
 enemies.fire = function(enemy)
@@ -15,7 +15,8 @@ enemies.fire = function(enemy)
       enemy.cooldown = 30
       bullet = {radius = 5,
                 x = enemy.x + enemy.width / 2, 
-                y = enemy.y + 40}
+                y = enemy.y + 40,
+                bulletspeed = 1.8}
       table.insert(enemies.bullets, bullet)
     end
   end
@@ -26,7 +27,7 @@ enemies.count = function()
   end
   return c
 end
-enemies.kill = function(i)
-  table.remove(used, enemies[i].x / 31)
+enemies.kill = function(i, e)
+  rng.remove(e.x / e.width)
   table.remove(enemies, i)
 end

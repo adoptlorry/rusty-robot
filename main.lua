@@ -7,10 +7,10 @@ end
 function love.update(dt)
   --collision with player bullets
   for i,e in ipairs(enemies) do
-    for _,b in ipairs(player.bullets) do
+    for j,b in ipairs(player.bullets) do
       if CheckCollision(b, e) then
-        enemies.kill(i)
-        table.remove(player.bullets, i)
+        enemies.kill(i, e)
+        table.remove(player.bullets, j)
         player.score = player.score + 1
       end
     end
@@ -39,28 +39,28 @@ function love.update(dt)
   --manage player bullets
   for i,b in ipairs(player.bullets) do
     if b.y < 0 then table.remove(player.bullets, i) end
-    b.y = b.y - player.bulletspeed
+    b.y = b.y - b.bulletspeed
   end
-  --manage enemies
+  --enemy movement
   for i,e in ipairs(enemies) do
     if e.y > (love.graphics.getHeight() - 50) then 
       table.remove(enemies, i)
     end
     enemies.fire(e) --try firing for each enemy
     e.y = e.y + e.movespeed --move the enemy down by it's move speed
-    for i,b in ipairs(enemies.bullets) do --manage each bullet
-      if b.y > (love.graphics.getHeight() - 50) then table.remove(enemies.bullets, i) end
-      b.y = b.y + e.bulletspeed
-    end
   end
-  
+  --enemy bullets
+  for i,b in ipairs(enemies.bullets) do
+    if b.y > (love.graphics.getHeight() - 50) then table.remove(enemies.bullets, i) end
+    b.y = b.y + b.bulletspeed
+  end
   if enemies.count() ~= enemies.max then
     enemies.spawn()
   end
 end
 function love.draw()
   --draw player score
-  love.graphics.print("Score:" .. player.score, 0, 0, 0, 2,2)
+  love.graphics.print("Score:" .. player.score)
   --draw player
   love.graphics.setColor(0, 255, 0)
   love.graphics.rectangle("line", player.x, player.y, player.width, player.height)
@@ -72,6 +72,7 @@ function love.draw()
   love.graphics.setColor(255, 0, 0)
   for _,e in ipairs(enemies) do
     love.graphics.rectangle("line", e.x, e.y, e.width, e.height)
+    love.graphics.print(e.x / e.width, e.x, e.y, 0, 1,1)
   end
   --draw enemy bullets
   for _,b in ipairs(enemies.bullets) do
