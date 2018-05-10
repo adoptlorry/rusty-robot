@@ -1,13 +1,13 @@
 require("rng")
 enemies = {}
-enemies.max = 6
+enemies.max = 3
 enemies.bullets = {}
 enemies.spawn = function()
-  enemy = {x = rng.get(30),
+  enemy = {x = rng.getdistinct(30),
            y = -10,
            width = 30, height = 20,
            cooldown = 20,
-           movespeed = 0.8}
+           movespeed = rng.get(5, 10) / 10.0}
   table.insert(enemies, enemy)
 end
 enemies.fire = function(enemy)

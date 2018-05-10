@@ -1,7 +1,6 @@
 player = {x = love.graphics.getWidth() / 2,
           y = love.graphics.getHeight() - 200,
           width = 20, height = 20,
-          movespeed = 5,
           cooldown = 20,
           health = 2, score = 0,
           bullets = {}}
