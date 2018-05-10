@@ -1,5 +1,6 @@
 function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
+  love.graphics.setDefaultFilter("nearest", "nearest", 0)
   require("player")
   require("enemy")
   require("collision")
@@ -63,6 +64,10 @@ function love.draw()
   --draw player bullets
   for _,b in pairs(player.bullets) do
     love.graphics.circle("fill", b.x, b.y, b.radius)
+  end
+  --draw health bar
+  for i = 1, player.health do
+    love.graphics.rectangle("fill", i*22, love.graphics.getHeight() - 100, 20, 20)
   end
   --draw enemies
   love.graphics.setColor(255, 0, 0)

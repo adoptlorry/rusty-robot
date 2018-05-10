@@ -2,7 +2,7 @@ player = {x = love.graphics.getWidth() / 2,
           y = love.graphics.getHeight() - 200,
           width = 20, height = 20,
           cooldown = 20,
-          health = 2, score = 0,
+          health = 5, score = 0,
           bullets = {}}
 player.fire = function()
   if player.cooldown <= 0 then
